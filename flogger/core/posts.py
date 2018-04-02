@@ -150,6 +150,9 @@ class Posts(Resource):
             title = data.get('title')
             assert title, 'Post should have a valid title'
 
+            cover_img = data.get('cover_img')
+            assert title, 'Post should have a valid cover_img url'
+
             caption = data.get('caption')
             assert caption, 'Post should have a valid caption'
 
@@ -172,7 +175,7 @@ class Posts(Resource):
 
         try:
             # Database
-            post = PostsColl(title=title, caption=caption)
+            post = PostsColl(title=title, caption=caption, cover_img=cover_img)
             post.content = content
             post.category = category
             post.save()

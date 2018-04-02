@@ -20,8 +20,12 @@ from .core import (
     Tags, Categories
 )
 
+# PUBLIC routes for others to view blog
+
+
+# APIs below are accessible to the Maintainer
 api.add_resource(WorkBench, '/api/workbench')
 api.add_resource(Tags, '/api/tags')
 api.add_resource(Categories, '/api/categories')
 api.add_resource(Posts, '/api/posts')
-api.add_resource(Post, '/api/post/<_id>')
+api.add_resource(Post, '/api/posts/<_id>')
