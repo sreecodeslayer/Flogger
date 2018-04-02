@@ -15,6 +15,45 @@ from mongoengine.errors import (
 )
 
 
+class Tags(Resource):
+    def post(self):
+        try:
+            data = request.get_json()
+
+            name = data.get('name')
+
+            assert name, 'Tag name is required'
+        except AssertionError as e:
+            return make_response(jsonify(message=str(e)), 400)
+
+        try:
+            tag = TagsCol(name=name)
+            tag.save()
+            return jsonify(tag=tag)
+        except Exception as e:
+            raise
+
+    def get(self):
+        try:
+            params = request.args
+            page = params.get('page', 1)
+
+            per_page = params.get('per_page', 10)
+
+        except Exception as e:
+            raise e
+
+        try:
+            _tags = TagsCol.objects.paginate(
+                page=page, per_page=per_page)
+            tags = _tags.__dict__
+
+            tags.pop('iterable')
+            return jsonify(tags=tags)
+        except Exception as e:
+            raise e
+
+
 class Categories(Resource):
     def post(self):
         try:
@@ -63,11 +102,40 @@ class Posts(Resource):
 
             per_page = params.get('per_page', 10)
 
+            # Filters
+
+            tag = params.get('tag')
+            category = params.get('category')
+
         except Exception as e:
             raise e
 
         try:
-            _posts = PostsColl.objects.paginate(page=page, per_page=per_page)
+            if tag and not category:
+                try:
+                    tag = TagsCol.objects.get(id=tag)
+                    _posts = PostsColl.objects(tags__in=[tag])
+                except DoesNotExist:
+                    _posts = PostsColl.objects()
+
+            elif category and not tag:
+                try:
+                    cat = CategoriesCol.objects.get(id=category)
+                    _posts = PostsColl.objects(category=cat)
+                except DoesNotExist:
+                    _posts = PostsColl.objects()
+            elif category and tag:
+                try:
+                    tag = TagsCol.objects.get(id=tag)
+                    cat = CategoriesCol.objects.get(id=category)
+                    _posts = PostsColl.objects(category=cat, tags__in=[tag])
+                except DoesNotExist:
+                    _posts = PostsColl.objects()
+
+            else:
+                _posts = PostsColl.objects()
+
+            _posts = _posts.paginate(page=page, per_page=per_page)
             posts = _posts.__dict__
             posts.pop('iterable')
 
@@ -88,6 +156,7 @@ class Posts(Resource):
             category = data.get('category')
             assert category, 'Post should have a valid category'
 
+            tags = data.get('tags')
             content = data.get('content', '')
 
         except AssertionError as e:
@@ -107,6 +176,17 @@ class Posts(Resource):
             post.content = content
             post.category = category
             post.save()
+
+            if tags:
+                _tags = []
+                for tag in tags:
+                    try:
+                        tag = TagsCol.objects.get(id=tag)
+                        _tags.append(tag)
+                    except DoesNotExist:
+                        pass
+                post.update(add_to_set__tags=_tags)
+                post.reload()
         except ValidationError as e:
             return make_response(
                 jsonify(message=str(e)), 422)

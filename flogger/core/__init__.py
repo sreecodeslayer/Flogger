@@ -1,5 +1,5 @@
 from .creator import WorkBench
 from .posts import (
     Posts, Post,
-    Categories
+    Tags, Categories
 )

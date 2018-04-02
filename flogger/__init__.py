@@ -17,10 +17,11 @@ api = Api(app)
 from .core import (
     WorkBench,
     Posts, Post,
-    Categories
+    Tags, Categories
 )
 
 api.add_resource(WorkBench, '/api/workbench')
+api.add_resource(Tags, '/api/tags')
 api.add_resource(Categories, '/api/categories')
 api.add_resource(Posts, '/api/posts')
 api.add_resource(Post, '/api/post/<_id>')
