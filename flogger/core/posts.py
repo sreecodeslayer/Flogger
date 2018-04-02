@@ -5,7 +5,9 @@ from flask import (
 )
 from flask_restful import Resource
 from flogger.db.models import (
-    Posts as PostsColl
+    Posts as PostsColl,
+    Categories as CategoriesCol,
+    Tags as TagsCol
 )
 from mongoengine.errors import (
     ValidationError,
@@ -13,9 +15,65 @@ from mongoengine.errors import (
 )
 
 
-class Posts(Resource):
+class Categories(Resource):
+    def post(self):
+        try:
+            data = request.get_json()
+
+            name = data.get('name')
+
+            assert name, 'Category name is required'
+        except AssertionError as e:
+            return make_response(jsonify(message=str(e)), 400)
+
+        try:
+            cat = CategoriesCol(name=name)
+            cat.save()
+            return jsonify(category=cat)
+        except Exception as e:
+            raise
+
     def get(self):
-        pass
+        try:
+            params = request.args
+            page = params.get('page', 1)
+
+            per_page = params.get('per_page', 10)
+
+        except Exception as e:
+            raise e
+
+        try:
+            _cats = CategoriesCol.objects.paginate(
+                page=page, per_page=per_page)
+            cats = _cats.__dict__
+
+            cats.pop('iterable')
+            return jsonify(categories=cats)
+        except Exception as e:
+            raise e
+
+
+class Posts(Resource):
+
+    def get(self):
+        try:
+            params = request.args
+            page = params.get('page', 1)
+
+            per_page = params.get('per_page', 10)
+
+        except Exception as e:
+            raise e
+
+        try:
+            _posts = PostsColl.objects.paginate(page=page, per_page=per_page)
+            posts = _posts.__dict__
+            posts.pop('iterable')
+
+            return jsonify(posts=posts)
+        except Exception as e:
+            raise e
 
     def post(self):
         try:
@@ -36,9 +94,18 @@ class Posts(Resource):
             return make_response(jsonify(message=str(e)), 400)
 
         try:
+            category = CategoriesCol.objects.get(id=category)
+        except ValidationError as e:
+            return make_response(
+                jsonify(message=str(e)), 422)
+        except DoesNotExist as e:
+            return make_response(jsonify(message=str(e)), 404)
+
+        try:
             # Database
             post = PostsColl(title=title, caption=caption)
             post.content = content
+            post.category = category
             post.save()
         except ValidationError as e:
             return make_response(
@@ -54,7 +121,7 @@ class Post(Resource):
 
             return jsonify(post=post)
         except DoesNotExist as e:
-            return make_response(jsonify(message=e), 404)
+            return make_response(jsonify(message=str(e)), 404)
 
     def delete(self, _id):
         try:
