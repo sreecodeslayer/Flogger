@@ -11,7 +11,7 @@
                     <v-container fill-height fluid>
                       <v-layout fill-height>
                         <v-flex xs12 align-end felxbox>
-                            <span class="headline">{{post.title}}</span>
+                          <span class="headline">{{post.title}}</span>
                         </v-flex>
                       </v-layout>
                     </v-container>
@@ -29,9 +29,38 @@
                  <v-btn icon class="red--text">
                   <v-icon mini>fa-heart</v-icon>
                 </v-btn>
-                <v-btn icon class="blue--text">
-                  <v-icon mini>fa-share</v-icon>
-                </v-btn>
+                <v-bottom-sheet v-model="shareSheet">
+                  <v-btn slot="activator" icon class="blue--text" @click.native="postToShare = post">
+                    <v-icon mini>fa-share</v-icon>
+                  </v-btn>
+                  <v-list>
+                    <v-subheader>Share post via</v-subheader>
+                    <v-list-tile color="indigo darken-1" @click="shareSheet = false;sharePost()">
+                      <v-list-tile-avatar>
+                        <v-icon medium color="indigo darken-1">fa-facebook</v-icon>
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>Facebook</v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile color="blue lighten-2" @click="shareSheet = false;sharePost()">
+                      <v-list-tile-avatar>
+                        <v-icon medium color="blue lighten-2">fa-twitter</v-icon>
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>Twitter</v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile color="teal darken-3" @click="shareSheet = false;sharePost()">
+                      <v-list-tile-avatar>
+                        <v-icon medium color="teal darken-3">fa-whatsapp</v-icon>
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>WhatsApp</v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile color="lime darken-3" @click="shareSheet = false;sharePost()">
+                      <v-list-tile-avatar>
+                        <v-icon medium color="lime darken-3">fa-copy</v-icon>
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>Clipboard</v-list-tile-content>
+                    </v-list-tile>
+                  </v-list>
+                </v-bottom-sheet>
                 <v-spacer></v-spacer>
                 <v-btn small flat class="teal--text" :href="'/posts/'+post._id.$oid">Read</v-btn>
               </v-card-actions>
@@ -48,7 +77,9 @@ export default {
   name: 'Home',
   data () {
     return {
-      posts: []
+      posts: [],
+      shareSheet: false,
+      postToShare: null
     }
   },
   methods: {
@@ -57,7 +88,11 @@ export default {
       this.$http.get(url).then((response) => {
         this.posts = response.data.posts.items
       })
+    },
+    sharePost () {
+      console.log(this.postToShare)
     }
+
   },
   created () {
     this.getPosts()
