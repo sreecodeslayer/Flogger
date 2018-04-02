@@ -1,2 +1,2 @@
 from .creator import WorkBench
-from .posts import Posts
+from .posts import Posts, Post

@@ -16,8 +16,9 @@ api = Api(app)
 
 from .core import (
     WorkBench,
-    Posts
+    Posts, Post
 )
 
 api.add_resource(WorkBench, '/api/workbench')
 api.add_resource(Posts, '/api/posts')
+api.add_resource(Post, '/api/post/<_id>')
