@@ -4,6 +4,12 @@ from flask import (
     make_response
 )
 from flask_restful import Resource
+from flogger.db.models import (
+    Posts as PostsColl
+)
+from mongoengine.errors import (
+    ValidationError
+)
 
 
 class Posts(Resource):
@@ -20,6 +26,9 @@ class Posts(Resource):
             caption = data.get('caption')
             assert caption, 'Post should have a valid caption'
 
+            category = data.get('category')
+            assert category, 'Post should have a valid category'
+
             content = data.get('content', '')
 
         except AssertionError as e:
@@ -27,7 +36,11 @@ class Posts(Resource):
 
         try:
             # Database
-            post = {}
-        except Exception as e:
-            raise e
-        return make_response(jsonify(message='Post created', post=post), 200)
+            post = PostsColl(title=title, caption=caption)
+            post.content = content
+            post.save()
+        except ValidationError as e:
+            return make_response(
+                jsonify(message=str(e)), 422)
+        return make_response(
+            jsonify(message='Post created', post=post), 200)
