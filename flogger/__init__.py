@@ -5,3 +5,7 @@ from flask import (
 )
 
 from flask_restful import Api
+
+app = Flask('flogger')
+
+api = Api(app)
