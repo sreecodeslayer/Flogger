@@ -2,16 +2,16 @@
   <v-container fluid>
     <v-slide-y-transition mode="out-in">
       <v-layout row wrap>
-        <v-flex xs9 sm9 md9 lg9>
+        <v-flex xs9 sm9 md9 lg9 offset-md1 offset-lg2>
           <v-layout row wrap>
             <v-flex xs12 v-for="post in posts" :key="post.id">
               <v-card class="my-3" hover>
-                <v-parallax :src="post.cover_img" height="300">
-                  <v-card-media class="white--text" height="300">
+                <v-parallax :src="post.cover_img" height="450">
+                  <v-card-media class="white--text" height="450">
                     <v-container fill-height fluid>
                       <v-layout fill-height>
                         <v-flex xs12 align-end felxbox>
-                          <span class="headline">{{post.title}}</span>
+                            <span class="headline">{{post.title}}</span>
                         </v-flex>
                       </v-layout>
                     </v-container>
