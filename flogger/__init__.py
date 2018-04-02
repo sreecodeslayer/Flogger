@@ -12,7 +12,9 @@ api = Api(app)
 
 
 from .core import (
-    WorkBench
+    WorkBench,
+    Posts
 )
 
-api.add_resource(WorkBench, '/workbench')
+api.add_resource(WorkBench, '/api/workbench')
+api.add_resource(Posts, '/api/posts')
