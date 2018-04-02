@@ -114,26 +114,36 @@ class Posts(Resource):
             if tag and not category:
                 try:
                     tag = TagsCol.objects.get(id=tag)
-                    _posts = PostsColl.objects(tags__in=[tag])
+                    _posts = PostsColl.objects(
+                        tags__in=[tag]).order_by(
+                        'created_on', '-created_on')
                 except DoesNotExist:
-                    _posts = PostsColl.objects()
+                    _posts = PostsColl.objects().order_by(
+                        'created_on', '-created_on')
 
             elif category and not tag:
                 try:
                     cat = CategoriesCol.objects.get(id=category)
-                    _posts = PostsColl.objects(category=cat)
+                    _posts = PostsColl.objects(
+                        category=cat).order_by(
+                        'created_on', '-created_on')
                 except DoesNotExist:
-                    _posts = PostsColl.objects()
+                    _posts = PostsColl.objects().order_by(
+                        'created_on', '-created_on')
             elif category and tag:
                 try:
                     tag = TagsCol.objects.get(id=tag)
                     cat = CategoriesCol.objects.get(id=category)
-                    _posts = PostsColl.objects(category=cat, tags__in=[tag])
+                    _posts = PostsColl.objects(category=cat, tags__in=[
+                                               tag]).order_by(
+                        'created_on', '-created_on')
                 except DoesNotExist:
-                    _posts = PostsColl.objects()
+                    _posts = PostsColl.objects().order_by(
+                        'created_on', '-created_on')
 
             else:
-                _posts = PostsColl.objects()
+                _posts = PostsColl.objects().order_by(
+                    'created_on', '-created_on')
 
             _posts = _posts.paginate(page=page, per_page=per_page)
             posts = _posts.__dict__
