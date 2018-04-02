@@ -8,7 +8,8 @@ from flogger.db.models import (
     Posts as PostsColl
 )
 from mongoengine.errors import (
-    ValidationError
+    ValidationError,
+    DoesNotExist
 )
 
 
@@ -44,3 +45,22 @@ class Posts(Resource):
                 jsonify(message=str(e)), 422)
         return make_response(
             jsonify(message='Post created', post=post), 200)
+
+
+class Post(Resource):
+    def get(self, _id):
+        try:
+            post = PostsColl.objects.get(id=_id)
+
+            return jsonify(post=post)
+        except DoesNotExist as e:
+            return make_response(jsonify(message=e), 404)
+
+    def delete(self, _id):
+        try:
+            post = PostsColl.objects.get(id=_id)
+            post.delete()
+
+            return make_response(jsonify(post=post), 204)
+        except DoesNotExist as e:
+            return make_response(jsonify(message=str(e)), 404)
