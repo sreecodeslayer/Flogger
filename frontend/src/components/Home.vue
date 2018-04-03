@@ -140,9 +140,7 @@ export default {
     getPosts (q = '') {
       this.loaded = false
       console.log(q)
-      var url = 'http://127.0.0.1:8000/api/posts?page=' +
-      this.page + '&per_page=' +
-      this.perPage + '&q=' + q
+      var url = '/api/posts?page=' + this.page + '&per_page=' + this.perPage + '&q=' + q
 
       this.$http.get(url).then(
         (response) => {

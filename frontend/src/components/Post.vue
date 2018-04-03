@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     getPost () {
-      var url = 'http://localhost:8000/api/posts/' + this.post.id
+      var url = '/api/posts/' + this.post.id
       this.$http.get(url).then(
         (response) => {
           this.post = response.data.post
