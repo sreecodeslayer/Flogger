@@ -63,6 +63,12 @@
   <router-view/>
 </v-content>
 <v-footer color="teal darken-2" app>
+
+         <!--  <v-fab-transition>
+            <v-btn color="red" dark small absolute top right fab>
+              <v-icon>expand_more</v-icon>
+            </v-btn>
+          </v-fab-transition> -->
   <v-layout row wrap align-center>
     <v-flex xs10 sm10 md11 lg11>
       <div class="white--text ml-3 text-xs-center">
