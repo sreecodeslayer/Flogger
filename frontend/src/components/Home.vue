@@ -3,11 +3,11 @@
     <v-slide-y-transition mode="out-in">
       <v-layout row wrap>
         <v-flex xs9 sm9 md9 lg9 offset-md1 offset-lg2>
-          <v-layout row wrap>
-            <v-flex xs12 v-for="post in posts" :key="post.id">
+          <v-layout row wrap v-if="loaded">
+            <v-flex xs12 v-for="post in posts" :key="post.id" v-cloak>
               <v-card class="my-3" hover>
-                <v-parallax :src="post.cover_img" height="450">
-                  <v-card-media class="white--text" height="450">
+                <v-parallax :src="post.cover_img" v-ripple height="450">
+                  <v-card-media class="white--text" v-ripple height="450">
                     <v-container fill-height fluid>
                       <v-layout fill-height>
                         <v-flex xs12 align-end felxbox>
@@ -19,7 +19,10 @@
                 </v-parallax>
                 <v-card-title>
                   <div>
-                    <span class="grey--text">{{post.created_on.$date | humanizeTime}}</span><br>
+                    <v-tooltip bottom>
+                      <span slot="activator" class="grey--text">{{post.created_on.$date | humanizeTime}}</span>
+                      <span>{{post.created_on.$date | calendarTime}}</span>
+                    </v-tooltip>
                   </div>
                 </v-card-title>
                 <v-card-text>
@@ -62,15 +65,23 @@
                   </v-list>
                 </v-bottom-sheet>
                 <v-spacer></v-spacer>
-                <v-btn small flat class="teal--text" :href="'/posts/'+post._id.$oid">Read</v-btn>
+                <v-btn small flat class="teal--text" :href="'#/posts/'+post._id.$oid">Read</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
         </v-layout>
-      </v-flex>
-    </v-layout>
-  </v-slide-y-transition>
-</v-container>
+        <!-- <v-layout row wrap align-center v-else> -->
+          <div class="topcorner-loader" v-else>
+            <v-spinner :animation-duration="2000"
+            :size="50"
+            color="#ff1d5e"
+            ></v-spinner>
+          </div>
+          <!-- </v-layout> -->
+        </v-flex>
+      </v-layout>
+    </v-slide-y-transition>
+  </v-container>
 </template>
 <script>
 export default {
@@ -79,7 +90,8 @@ export default {
     return {
       posts: [],
       shareSheet: false,
-      postToShare: null
+      postToShare: null,
+      loaded: false
     }
   },
   methods: {
@@ -87,6 +99,7 @@ export default {
       var url = 'http://127.0.0.1:8000/api/posts'
       this.$http.get(url).then((response) => {
         this.posts = response.data.posts.items
+        this.loaded = true
       })
     },
     sharePost () {
@@ -100,5 +113,4 @@ export default {
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
+

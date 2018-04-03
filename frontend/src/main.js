@@ -9,6 +9,7 @@ import 'font-awesome/css/font-awesome.min.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueMoment from 'vue-moment'
+import { SemipolarSpinner } from 'epic-spinners'
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
@@ -16,16 +17,24 @@ Vue.use(Vuetify)
 Vue.use(VueMoment)
 Vue.use(VueAxios, axios)
 
+Vue.component('v-spinner', SemipolarSpinner)
+
 Vue.config.productionTip = false
 
 Vue.filter('humanizeTime', function (value) {
   return Vue.moment(value).fromNow()
 })
 
+Vue.filter('calendarTime', function (value) {
+  return Vue.moment(value).calendar()
+})
+
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+document.addEventListener('DOMContentLoaded', () => {
+  new Vue({
+    el: '#app',
+    router,
+    components: { App },
+    template: '<App/>'
+  })
 })
