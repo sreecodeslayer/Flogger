@@ -85,7 +85,7 @@
               </v-card>
             </v-flex>
           </v-layout>
-          <v-layout row wrap align-center>
+          <v-layout row wrap align-center v-if="posts.length > 0">
             <v-flex xs12>
               <div class="text-xs-center" v-cloak>
                 <v-pagination 
