@@ -40,6 +40,8 @@ class Tags(Resource):
 
             per_page = params.get('per_page', 10)
 
+            per_page = 20 if per_page > 20 else per_page
+
         except Exception as e:
             raise e
 
