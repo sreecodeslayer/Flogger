@@ -98,9 +98,9 @@ class Posts(Resource):
     def get(self):
         try:
             params = request.args
-            page = params.get('page', 1)
+            page = int(params.get('page', 1))
 
-            per_page = params.get('per_page', 10)
+            per_page = int(params.get('per_page', 10))
 
             # Filters
 
