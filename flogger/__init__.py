@@ -1,7 +1,8 @@
 from flask import (
     Flask,
     jsonify,
-    request
+    request,
+    render_template
 )
 
 from flask_restful import Api
@@ -9,6 +10,10 @@ from .db import init_db
 
 app = Flask('flogger', instance_relative_config=True)
 app.config.from_envvar('FLOGGER_SETTINGS')
+
+@app.route('/', methods=['GET'])
+def index():
+	return render_template('index.html')
 
 db = init_db(app)
 api = Api(app)
