@@ -2,7 +2,20 @@
 # https://github.com/Damnever/pigar
 
 # flogger/__init__.py: 1
-flask == 0.12.2
+# flogger/core/posts.py: 1
+# flogger/db/__init__.py: 1
+Flask == 0.12.2
 
 # flogger/__init__.py: 7
-flask-restful == 0.3.6
+# flogger/core/creator.py: 1
+# flogger/core/posts.py: 6
+Flask_RESTful == 0.3.6
+
+# flogger/db/__init__.py: 2
+flask-mongoengine == 0.9.5
+
+# flogger/core/posts.py: 12
+mongoengine == 0.15.0
+
+# flogger/db/__init__.py: 2
+quokka-flask-mongoengine == 0.7.4
