@@ -104,6 +104,8 @@ class Posts(Resource):
 
             per_page = int(params.get('per_page', 10))
 
+            q = params.get('q')
+
             # Filters
 
             tag = params.get('tag')

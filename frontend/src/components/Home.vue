@@ -2,8 +2,22 @@
   <v-container fluid>
     <v-slide-y-transition mode="out-in">
       <v-layout row wrap>
-        <v-flex xs9 sm9 md9 lg9 offset-md1 offset-lg2>
+        <v-flex xs10 sm10 md10 lg10 offset-lg2>
           <div v-if="loaded">
+            <v-layout row wrap>
+              <v-toolbar>
+                <!-- <v-toolbar-side-icon></v-toolbar-side-icon> -->
+                <v-toolbar-title></v-toolbar-title>
+                <v-text-field 
+                append-icon="search" 
+                hide-details 
+                single-line
+                v-model="query"></v-text-field>
+              <!-- <v-btn icon flat>
+                <v-icon medium>search</v-icon>
+              </v-btn> -->
+            </v-toolbar>
+          </v-layout>
             <v-layout row wrap v-if="loaded">
               <v-flex xs12 v-for="post in posts" :key="post.id" v-cloak>
                 <v-card class="my-3" hover>
@@ -73,10 +87,14 @@
           </v-layout>
           <v-layout row wrap align-center>
             <v-flex xs12>
-            <div class="text-xs-center" v-cloak>
-              <v-pagination :length="totalPages" value="page" v-model="page"></v-pagination>
-            </div>
-          </v-flex>
+              <div class="text-xs-center" v-cloak>
+                <v-pagination 
+                :length="totalPages"
+                value="page"
+                v-model="page"
+                ></v-pagination>
+              </div>
+            </v-flex>
           </v-layout>
         </div>
         <!-- <v-layout row wrap align-center v-else> -->
@@ -102,24 +120,44 @@ export default {
       postToShare: null,
       loaded: false,
       page: 1,
-      perPage: 1,
-      totalPages: 0
+      perPage: 10,
+      totalPages: 0,
+      query: null
+    }
+  },
+  watch: {
+    page (newIndex) {
+      this.page = newIndex
+      this.getPosts()
+    },
+    query (q) {
+      if (q.length >= 5) {
+        this.getPosts(q)
+      }
     }
   },
   methods: {
-    getPosts () {
-      var url = 'http://127.0.0.1:8000/api/posts?page=' + this.page + '&per_page=' + this.perPage
-      this.$http.get(url).then((response) => {
-        var posts = response.data.posts
-        this.totalPages = parseInt(posts.total / posts.per_page)
-        this.posts = response.data.posts.items
-        this.loaded = true
-      })
+    getPosts (q = '') {
+      this.loaded = false
+      console.log(q)
+      var url = 'http://127.0.0.1:8000/api/posts?page=' +
+      this.page + '&per_page=' +
+      this.perPage + '&q=' + q
+
+      this.$http.get(url).then(
+        (response) => {
+          var posts = response.data.posts
+          this.totalPages = parseInt(posts.total / posts.per_page)
+          this.posts = response.data.posts.items
+          this.loaded = true
+        },
+        (err) => {
+          console.log(err)
+        })
     },
     sharePost () {
       console.log(this.postToShare)
     }
-
   },
   created () {
     this.getPosts()
