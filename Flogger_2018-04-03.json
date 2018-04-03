@@ -1,0 +1,215 @@
+{
+	"_type": "export",
+	"__export_format": 3,
+	"__export_date": "2018-04-03T04:49:18.105Z",
+	"__export_source": "insomnia.desktop.app:v5.12.4",
+	"resources": [
+		{
+			"_id": "wrk_b3f0bbc39bf140c89fa645fcc101f60d",
+			"created": 1522659123224,
+			"description": "",
+			"modified": 1522659123223,
+			"name": "Flogger",
+			"parentId": null,
+			"_type": "workspace"
+		},
+		{
+			"_id": "env_9a68721a2fa345cfa73c9925e8fa5c25",
+			"color": null,
+			"created": 1522659123526,
+			"data": {},
+			"isPrivate": false,
+			"modified": 1522659123526,
+			"name": "New Environment",
+			"parentId": "wrk_b3f0bbc39bf140c89fa645fcc101f60d",
+			"_type": "environment"
+		},
+		{
+			"_id": "jar_a8146a603cb6466d8246d10d3403f0f7",
+			"cookies": [],
+			"created": 1522659123529,
+			"modified": 1522659123529,
+			"name": "Default Jar",
+			"parentId": "wrk_b3f0bbc39bf140c89fa645fcc101f60d",
+			"_type": "cookie_jar"
+		},
+		{
+			"_id": "req_9aa05fd882774a7c9960b6860f6cfcf2",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"title\":\"A wonderful day\",\n\t\"caption\":\"One of the most beautiful ever in my life\",\n\t\"category\":\"5ac2010d19185b7d6bfbe78d\",\n\t\"tags\":[\"5ac20bf819185b12f653dde2\"]\t\n}"
+			},
+			"created": 1522659129850,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_79aacae351734bc98a8fc83c8fe2a44b",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"metaSortKey": -1522659129850,
+			"method": "POST",
+			"modified": 1522667884800,
+			"name": "POSTS",
+			"parameters": [],
+			"parentId": "wrk_b3f0bbc39bf140c89fa645fcc101f60d",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://127.0.0.1:8000/api/posts",
+			"_type": "request"
+		},
+		{
+			"_id": "req_4651a373be2544cbbd935ad4f28a2032",
+			"authentication": {},
+			"body": {},
+			"created": 1522662262294,
+			"description": "",
+			"headers": [],
+			"metaSortKey": -1522662262294,
+			"method": "GET",
+			"modified": 1522667105138,
+			"name": "POST",
+			"parameters": [],
+			"parentId": "wrk_b3f0bbc39bf140c89fa645fcc101f60d",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://127.0.0.1:8000/api/posts/5ac20d6419185b141336a83d",
+			"_type": "request"
+		},
+		{
+			"_id": "req_c074c485bc364659a16277c419465786",
+			"authentication": {},
+			"body": {},
+			"created": 1522662446641,
+			"description": "",
+			"headers": [],
+			"metaSortKey": -1522660696072,
+			"method": "DELETE",
+			"modified": 1522666686818,
+			"name": "POST",
+			"parameters": [],
+			"parentId": "wrk_b3f0bbc39bf140c89fa645fcc101f60d",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://127.0.0.1:8000/api/post/5ac20ca719185b136f8f33a8",
+			"_type": "request"
+		},
+		{
+			"_id": "req_8e934e101cb544f1ab525aea6a392e18",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"name\":\"Life\"\n}"
+			},
+			"created": 1522663626613,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_498fc4da1e214526b1fe84c7a4b51fd7",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"metaSortKey": -1522663626613,
+			"method": "POST",
+			"modified": 1522663643966,
+			"name": "Categories",
+			"parameters": [],
+			"parentId": "wrk_b3f0bbc39bf140c89fa645fcc101f60d",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://127.0.0.1:8000/api/categories",
+			"_type": "request"
+		},
+		{
+			"_id": "req_e13e4192ade64e1cbacdf75c559eebd5",
+			"authentication": {},
+			"body": {},
+			"created": 1522664344547,
+			"description": "",
+			"headers": [],
+			"metaSortKey": -1522662944453.5,
+			"method": "GET",
+			"modified": 1522664361909,
+			"name": "Categories",
+			"parameters": [],
+			"parentId": "wrk_b3f0bbc39bf140c89fa645fcc101f60d",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://127.0.0.1:8000/api/categories",
+			"_type": "request"
+		},
+		{
+			"_id": "req_ea1fac3ebbeb41f5a6b73ae02084034b",
+			"authentication": {},
+			"body": {},
+			"created": 1522664618357,
+			"description": "",
+			"headers": [],
+			"metaSortKey": -1521068365276.5,
+			"method": "GET",
+			"modified": 1522666499568,
+			"name": "Posts",
+			"parameters": [
+				{
+					"id": "pair_8042cb660931402f848e4cb4418cea0c",
+					"name": "category",
+					"value": "5ac2010d19185b7d6bfbe78d"
+				},
+				{
+					"id": "pair_5a21d47ab240472d9e205a30571c7865",
+					"name": "tag",
+					"value": "5ac20bf819185b12f653dde2"
+				}
+			],
+			"parentId": "wrk_b3f0bbc39bf140c89fa645fcc101f60d",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://127.0.0.1:8000/api/posts",
+			"_type": "request"
+		},
+		{
+			"_id": "req_748ecf8774f24791932f3ee0e0e980e4",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n\t\"name\":\"life\"\n}"
+			},
+			"created": 1522666438573,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_498fc4da1e214526b1fe84c7a4b51fd7",
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"metaSortKey": -1522663285533.25,
+			"method": "POST",
+			"modified": 1522666451744,
+			"name": "Tags",
+			"parameters": [],
+			"parentId": "wrk_b3f0bbc39bf140c89fa645fcc101f60d",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://127.0.0.1:8000/api/tags",
+			"_type": "request"
+		}
+	]
+}
