@@ -5,6 +5,7 @@ from flask import (
 )
 
 from flask_restful import Resource
+from datetime import datetime, timedelta
 
 from flask_jwt_extended import (
     current_user,
@@ -17,7 +18,9 @@ from mongoengine.errors import (
 )
 
 from flogger.db.models import (
-    Profile
+    Profile,
+    Skills,
+    SocialLinks
 )
 
 
@@ -34,6 +37,7 @@ class ProfileResource(Resource):
             return jsonify(profile=profile)
         except Exception as e:
             raise
+
     def patch(self):
         try:
             data = request.get_json()
@@ -52,12 +56,10 @@ class ProfileResource(Resource):
             skills = data.get('skills')
             social_links = data.get('social_links')
 
-
-            profile = Profile.objects.get(id=_id)
-
             if old_pswd and new_pswd:
+                profile = Profile.objects.get(id=_id)
                 # Reset / Change password
-                
+
                 # Verify current password
                 if profile.verify_password(old_pswd):
                     profile.set_password(new_pswd)
@@ -68,5 +70,35 @@ class ProfileResource(Resource):
                         jsonify(message='Invalid current password'),
                         403
                     )
+
+            else:
+                profile = Profile.objects.exclude('password').get(id=_id)
+                if full_name:
+                    profile.update(full_name=full_name)
+                if dob:
+                    try:
+                        dob = datetime.strptime(dob, '%d-%m-%Y')
+                        profile.update(dob=dob)
+                    except ValueError as e:
+                        raise
+                if skills:
+                    for _id in skills:
+                        try:
+                            skill = Skills.objecs.get(id=_id)
+                            profile.update(add_to_set__skills=[skill])
+                        except DoesNotExist:
+                            pass
+                if social_links:
+                    for _id in social_links:
+                        try:
+                            social = SocialLinks.objecs.get(id=_id)
+                            profile.update(add_to_set__social_links=[social])
+                        except DoesNotExist:
+                            pass
+                return jsonify(message='Changes made to profile',
+                               profile=profile.reload(
+                                   'full_name', 'dob', 'skills', 'social_links'
+                               )
+                               )
         except Exception as e:
             raise e
