@@ -94,6 +94,7 @@ export default {
       drawer: true,
       fixed: false,
       miniVariant: true,
+      isMobile: false,
       title: 'Sreenadh TC - Flogger'
     }
   },

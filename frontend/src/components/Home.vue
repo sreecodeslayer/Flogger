@@ -96,11 +96,19 @@
               </div>
             </v-flex>
           </v-layout>
+          <v-layout row wrap align-center v-else>
+            <v-flex xs12 flexbox>
+            <div class="text-xs-center mt-5" v-cloak>
+
+              <img src="@/assets/asset-1.png" :width="$vuetify.breakpoint.xs ? '100%' : '50%'">
+            </div>
+          </v-flex>
+          </v-layout>
         </div>
         <!-- <v-layout row wrap align-center v-else> -->
           <div class="topcorner-loader" v-else>
             <v-spinner :animation-duration="2000"
-            :size="50"
+            :size="$vuetify.breakpoint.xs ? 100 : 65"
             color="#ff1d5e"
             ></v-spinner>
           </div>
@@ -150,7 +158,9 @@ export default {
           this.loaded = true
         },
         (err) => {
-          console.log(err)
+          console.log(err.response)
+          this.posts = []
+          this.loaded = true
         })
     },
     sharePost () {
@@ -159,6 +169,9 @@ export default {
   },
   created () {
     this.getPosts()
+  },
+  mounted () {
+    console.log(this.$vuetify.breakpoint)
   }
 }
 </script>
