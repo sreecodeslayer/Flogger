@@ -1,5 +1,6 @@
 from flogger.db import get_db
 from datetime import datetime
+from passlib.hash import pbkdf2_sha512
 
 db = get_db()
 
@@ -58,6 +59,7 @@ class Skills(db.Document):
 
 class Profile(db.Document):
     full_name = db.StringField(required=True)
+    password = db.StringField(required=True)
     email = db.EmailField(required=True)
     dob = db.DateTimeField(required=True)
     avatar = db.URLField()
@@ -67,6 +69,19 @@ class Profile(db.Document):
     tel = db.StringField()
     social_links = db.ListField(db.ReferenceField(SocialLinks))
     skills = db.ListField(db.ReferenceField(Skills))
+
+    def __str__(self):
+        return "Users(id='%s')" % str(self.id)
+
+    def set_password(self, pswd):
+        self.password = pbkdf2_sha512.hash(pswd)
+
+    def verify_password(self, pswd):
+        return pbkdf2_sha512.verify(pswd, self.password)
+
+    def generate_auth_token(self, expiration=600):
+        s = Serializer(SECRET_KEY, expires_in=expiration)
+        return s.dumps({'id': self.id, 'email': self.email})
 
     meta = {
         'strict': False
