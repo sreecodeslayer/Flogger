@@ -84,5 +84,6 @@ class Profile(db.Document):
         return s.dumps({'id': self.id, 'email': self.email})
 
     meta = {
-        'strict': False
+        'strict': False,
+        'index':['email']
     }

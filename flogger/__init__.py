@@ -22,7 +22,7 @@ from datetime import datetime, timedelta
 app = Flask('flogger', instance_relative_config=True)
 app.config.from_envvar('FLOGGER_SETTINGS')
 app.config['JWT_SECRET_KEY'] = SECRET_KEY = 'thIs is a cr@zy s3cr3t k3y'
-
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
 
 # Init Database
 from .db import init_db
@@ -83,6 +83,7 @@ def check_profile():
 # Flask JWT
 def authenticate(email, pswd):
     try:
+        from .db.models import Profile
         user = Profile.objects.get(email=email)
         if user and user.verify_password(pswd):
             return {'id': str(user.id),
@@ -94,6 +95,7 @@ def authenticate(email, pswd):
 
 @app.route('/auth/login', methods=['POST'])
 def get_token():
+    from .db.models import Profile
     data = request.get_json()
     try:
         email = data.get('email')
