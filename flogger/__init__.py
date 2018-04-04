@@ -120,7 +120,7 @@ jwt = JWTManager(app)
 
 @jwt.user_identity_loader
 def user_identity_lookup(user):
-    return user.username
+    return user.email
 
 
 # Init Rest API
