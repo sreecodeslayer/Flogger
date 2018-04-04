@@ -121,8 +121,18 @@
 <script>
 export default {
   name: 'Home',
+  title: 'Home',
+  metaInfo () {
+    return {
+      title: this.user.name,
+      titleTemplate: '%s | Flogger'
+    }
+  },
   data () {
     return {
+      user: {
+        name: 'Sreenadh TC'
+      },
       posts: [],
       shareSheet: false,
       postToShare: null,
@@ -145,10 +155,10 @@ export default {
     }
   },
   methods: {
+
     getPosts (q = '') {
       this.loaded = false
-      console.log(q)
-      var url = '/api/posts?page=' + this.page + '&per_page=' + this.perPage + '&q=' + q
+      var url = '/posts?page=' + this.page + '&per_page=' + this.perPage + '&q=' + q
 
       this.$http.get(url).then(
         (response) => {
@@ -169,9 +179,6 @@ export default {
   },
   created () {
     this.getPosts()
-  },
-  mounted () {
-    console.log(this.$vuetify.breakpoint)
   }
 }
 </script>

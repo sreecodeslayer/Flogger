@@ -4,15 +4,15 @@
 			<div v-if="loaded" class="article">
         <v-layout row wrap>
           <v-flex xs10 offset-xs2>
-            <h1 class="display-2 teal--text darken-2" >{{post.title}}</h1>
+            <h1 class="teal--text darken-2" :class="$vuetify.breakpoint.xs ? 'title':'display-1'">{{post.title}}</h1>
             <br>
             <v-layout row wrap>
-              <v-flex xs10>
-                <div class="subheading">{{post.caption}}</div>
+              <v-flex sm9 md9 lg10>
+                <div :class="$vuetify.breakpoint.xs ? 'caption':'subheading'">{{post.caption}}</div>
               </v-flex>
-              <v-flex xs2  class="teal--text darken-2" v-ripple>
-                <span class="caption">
-                  <v-icon color="teal darken-2" mini flat>fa-calendar</v-icon>
+              <v-flex sm3 md3 lg2 class="primary--text darken-4" v-ripple>
+                <span :class="$vuetify.breakpoint.xs ? '':'caption'">
+                  <v-icon color="primary darken-2" mini flat>fa-calendar</v-icon>
                   {{ post.created_on.$date | calendarTime }}
                 </span>
               </v-flex>
@@ -26,7 +26,7 @@
       </div>
       <div class="topcorner-loader" v-else>
         <v-spinner :animation-duration="2000"
-        :size="50"
+        :size="$vuetify.breakpoint.xs ? 100 : 65"
         color="#ff1d5e"
         ></v-spinner>
       </div>
@@ -37,21 +37,29 @@
 <script>
 export default {
   name: 'Post',
+  metaInfo () {
+    return {
+      title: this.title,
+      titleTemplate: '%s | Flogger'
+    }
+  },
   data () {
     return {
       post: {
         id: this.$route.params.id
       },
-      loaded: false
+      loaded: false,
+      title: 'Loading ...'
 
     }
   },
   methods: {
     getPost () {
-      var url = '/api/posts/' + this.post.id
+      var url = '/posts/' + this.post.id
       this.$http.get(url).then(
         (response) => {
           this.post = response.data.post
+          this.title = this.post.title
           this.loaded = true
         },
         (err) => {

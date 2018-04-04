@@ -60,26 +60,25 @@
   </v-toolbar>
 </v-navigation-drawer>
 <v-content>
-  <router-view/>
+  <router-view></router-view>
 </v-content>
 <v-footer color="teal darken-2" app>
-
-         <!--  <v-fab-transition>
-            <v-btn color="red" dark small absolute top right fab>
-              <v-icon>expand_more</v-icon>
-            </v-btn>
-          </v-fab-transition> -->
   <v-layout row wrap align-center>
-    <v-flex xs10 sm10 md11 lg11>
+    <v-flex xs1 sm1 md1 lg1 class="text-xs-center">
+      <v-btn icon dark @click="miniVariant = !miniVariant;">
+        <v-icon v-html="miniVariant?'chevron_right':'chevron_left'"></v-icon>
+      </v-btn>
+    </v-flex>
+    <v-flex xs9 sm9 md10 lg10>
       <div class="white--text ml-3 text-xs-center">
         Made with
         <v-icon mini class="white--text">favorite</v-icon> by Sreenadh TC
       </div>
     </v-flex>
     <v-flex xs2 sm2 md1 lg1>
-        <v-btn icon flat :href="'https://github.com/sreecodeslayer/Flogger'">
-          <v-icon class="white--text" style="cursor:pointer;" medium>fa-github</v-icon>
-        </v-btn>
+      <v-btn icon flat :href="'https://github.com/sreecodeslayer/Flogger'">
+        <v-icon class="white--text" style="cursor:pointer;" medium>fa-github</v-icon>
+      </v-btn>
     </v-flex>
   </v-layout>
 </v-footer>
@@ -94,9 +93,13 @@ export default {
       drawer: true,
       fixed: false,
       miniVariant: true,
-      isMobile: false,
-      title: 'Sreenadh TC - Flogger'
+      isMobile: false
     }
+  },
+  title: null,
+  metaInfo: {
+    title: 'Home',
+    titleTemplate: '%s | Flogger'
   },
   name: 'App'
 }
