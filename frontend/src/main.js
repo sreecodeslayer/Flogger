@@ -12,7 +12,8 @@ import VueMoment from 'vue-moment'
 import { SemipolarSpinner } from 'epic-spinners'
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
-
+axios.defaults.baseURL = process.env.BASE_URL
+console.log(axios.defaults)
 Vue.use(Vuetify)
 Vue.use(VueMoment)
 Vue.use(VueAxios, axios)
@@ -29,6 +30,10 @@ Vue.filter('calendarTime', function (value) {
   return Vue.moment(value).calendar()
 })
 
+Vue.directive('title', {
+  inserted (el, binding) { document.title = binding.value },
+  update (el, binding) { document.title = binding.value }
+})
 /* eslint-disable no-new */
 document.addEventListener('DOMContentLoaded', () => {
   new Vue({
