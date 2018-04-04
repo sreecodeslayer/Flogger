@@ -17,7 +17,7 @@ from flask_jwt_extended import (
     get_jwt_identity,
     get_jwt_claims
 )
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 
 app = Flask('flogger', instance_relative_config=True)
 app.config.from_envvar('FLOGGER_SETTINGS')
@@ -36,11 +36,9 @@ def index():
     return render_template('index.html')
 
 
-# Database Models
-from .db.models import Profile
-
 @app.before_first_request
 def check_profile():
+    from .db.models import Profile
     try:
         profile = app.config['PROFILE']
         full_name = profile.get('full_name')
@@ -49,15 +47,19 @@ def check_profile():
         dob = profile.get('dob')
 
         assert profile.get(
-            'full_name'), 'Please update your flask config with PROFILE["full_name"]'
+            'full_name'), 'Please update your flask'
+        'config with PROFILE["full_name"]'
         assert profile.get(
-            'email'), 'Please update your flask config with PROFILE["email"]'
+            'email'), 'Please update your flask'
+        'config with PROFILE["email"]'
         assert profile.get(
-            'password'), 'Please update your flask config with PROFILE["password"]'
+            'password'), 'Please update your flask'
+        'config with PROFILE["password"]'
         assert profile.get(
-            'dob'), 'Please update your flask config with PROFILE["dob"] > Format "DD-MM-YYY"'
+            'dob'), 'Please update your flask'
+        'config with PROFILE["dob"] > Format "DD-MM-YYY"'
         try:
-            dob = datetime.strptime(dob,'%d-%m-%Y')
+            dob = datetime.strptime(dob, '%d-%m-%Y')
         except ValueError as e:
             raise RuntimeError(e)
 
@@ -126,8 +128,9 @@ def user_identity_lookup(user):
 # Init Rest API
 api = Api(app)
 
+workbench_api = Api(app, decorators=[jwt_required])
 from .core import (
-    WorkBench,
+    WorkBench, Profile,
     Posts, Post,
     Tags, Categories
 )
@@ -137,9 +140,9 @@ from .core import (
 
 
 # APIs below are accessible to the Maintainer
-api.add_resource(WorkBench, '/api/workbench')
-# api.add_resource(Profile, '/api/workbench/profile')
-api.add_resource(Tags, '/api/tags')
-api.add_resource(Categories, '/api/categories')
-api.add_resource(Posts, '/api/posts')
-api.add_resource(Post, '/api/posts/<_id>')
+workbench_api.add_resource(WorkBench, '/api/workbench')
+workbench_api.add_resource(Profile, '/api/workbench/profile')
+workbench_api.add_resource(Tags, '/api/tags')
+workbench_api.add_resource(Categories, '/api/categories')
+workbench_api.add_resource(Posts, '/api/posts')
+workbench_api.add_resource(Post, '/api/posts/<_id>')
