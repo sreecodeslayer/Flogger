@@ -17,6 +17,8 @@ from flask_jwt_extended import (
     get_jwt_identity,
     get_jwt_claims
 )
+from datetime import datetime,timedelta
+
 app = Flask('flogger', instance_relative_config=True)
 app.config.from_envvar('FLOGGER_SETTINGS')
 app.config['JWT_SECRET_KEY'] = SECRET_KEY = 'thIs is a cr@zy s3cr3t k3y'
@@ -37,11 +39,15 @@ def index():
 # Database Models
 from .db.models import Profile
 
-
 @app.before_first_request
 def check_profile():
     try:
         profile = app.config['PROFILE']
+        full_name = profile.get('full_name')
+        email = profile.get('email')
+        password = profile.get('password')
+        dob = profile.get('dob')
+
         assert profile.get(
             'full_name'), 'Please update your flask config with PROFILE["full_name"]'
         assert profile.get(
@@ -50,6 +56,24 @@ def check_profile():
             'password'), 'Please update your flask config with PROFILE["password"]'
         assert profile.get(
             'dob'), 'Please update your flask config with PROFILE["dob"] > Format "DD-MM-YYY"'
+        try:
+            dob = datetime.strptime(dob,'%d-%m-%Y')
+        except ValueError as e:
+            raise RuntimeError(e)
+
+        # Make an admin [User]
+        try:
+            profile = Profile.objects.get(email=email)
+        except DoesNotExist:
+            profile = Profile(
+                full_name=full_name,
+                email=email,
+                dob=dob
+            )
+            profile.set_password(password)
+            profile.save()
+        except Exception as e:
+            raise
     except AssertionError as e:
         raise RuntimeError(e)
 

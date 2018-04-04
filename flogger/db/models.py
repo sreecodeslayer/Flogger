@@ -59,7 +59,7 @@ class Skills(db.Document):
 
 class Profile(db.Document):
     full_name = db.StringField(required=True)
-    password = db.StringField(required=True)
+    password = db.StringField()
     email = db.EmailField(required=True)
     dob = db.DateTimeField(required=True)
     avatar = db.URLField()

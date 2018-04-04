@@ -5,7 +5,7 @@ MONGODB_SETTINGS = {
     'host': 'mongodb://localhost:27017/FLOGGER'
 }
 PROFILE = {
-    # 'full_name': 'Sreenadh TC',
+    'full_name': 'Sreenadh TC',
     'password': 'admin',
     'email': 'sreenadhtc@gmail.com',
     'dob': '25-11-1994',
