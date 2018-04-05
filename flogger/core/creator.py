@@ -6,6 +6,7 @@ from flask import (
 
 from flask_restful import Resource
 from datetime import datetime, timedelta
+from marshmallow import ValidationError
 
 from flask_jwt_extended import (
     current_user,
@@ -23,10 +24,59 @@ from flogger.db.models import (
     SocialLinks
 )
 
+from flogger.db.schemas import (
+    # ProfileSchema,
+    SkillsSchema,
+    SocialLinksSchema
+)
+
+social_schema = SocialLinksSchema()
+
 
 class WorkBenchResource(Resource):
     def get(self):
         pass
+
+
+class SocialLinksResource(Resource):
+    def get(self):
+        try:
+            email = get_jwt_identity()
+            social_links = Profile.objects.get(email=email).social_links
+            return jsonify(social_links=social_links)
+        except Exception as e:
+            raise
+
+    def post(self):
+        try:
+            email = get_jwt_identity()
+
+            data = request.get_json()
+            try:
+                social = SocialLinks.objects.get(name=data.get('name'))
+                return make_response(jsonify(
+                    message="Link present under the name: %s" % (
+                        data.get('name'))
+                ), 409
+                )
+            except DoesNotExist:
+                try:
+                    social = social_schema.load(data)
+                    if not social.errors:
+                        social = social.data.save()
+                        return social_schema.dump(social)
+                    return make_response(
+                        jsonify(message=social.errors),
+                        422
+                    )
+                except ValidationError as err:
+                    return make_response(
+                        jsonify(message=err.errors),
+                        422
+                    )
+                return social_schema.dump(social)
+        except Exception as e:
+            raise
 
 
 class ProfileResource(Resource):
