@@ -133,6 +133,7 @@ api = Api(app)
 workbench_api = Api(app, decorators=[jwt_required])
 from .core import (
     WorkBench, Profile,
+    SocialLinks,
     Posts, Post,
     Tags, Categories
 )
@@ -144,6 +145,7 @@ from .core import (
 # APIs below are accessible to the Maintainer
 workbench_api.add_resource(WorkBench, '/api/workbench')
 workbench_api.add_resource(Profile, '/api/workbench/profile')
+workbench_api.add_resource(SocialLinks, '/api/workbench/profile/social')
 workbench_api.add_resource(Tags, '/api/tags')
 workbench_api.add_resource(Categories, '/api/categories')
 workbench_api.add_resource(Posts, '/api/posts')
