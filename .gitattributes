@@ -1,0 +1,2 @@
+# ignore all JS files as this is a VUE frontend
+*.js linguist-vendored=true
