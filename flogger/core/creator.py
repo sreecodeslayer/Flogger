@@ -31,6 +31,7 @@ from flogger.db.schemas import (
 )
 
 social_schema = SocialLinksSchema()
+skills_schema = SkillsSchema()
 
 
 class WorkBenchResource(Resource):
@@ -79,6 +80,66 @@ class SocialLinksResource(Resource):
                 return social_schema.dump(social)
         except Exception as e:
             raise
+
+
+class SkillsResource(Resource):
+    def get(self):
+        try:
+            email = get_jwt_identity()
+            skills = Profile.objects.get(email=email).skills
+            skills = skills_schema.dump(skills, many=True)
+            return jsonify(skills=skills.data)
+        except Exception as e:
+            raise
+
+    def post(self):
+        try:
+            email = get_jwt_identity()
+            profile = Profile.objects.get_or_404(email=email)
+            data = request.get_json()
+            try:
+                skill = Skills.objects.get(name=data.get('name'))
+                return make_response(jsonify(
+                    message="Skill present under the name: %s" % (
+                        data.get('name'))
+                ), 409
+                )
+            except DoesNotExist:
+                try:
+                    skill = skills_schema.load(data)
+                    if not skill.errors:
+                        skill = skill.data.save()
+                        profile.update(add_to_set__skills=[skill])
+                        return skills_schema.dump(skill)
+                    return make_response(
+                        jsonify(message=skill.errors),
+                        422
+                    )
+                except ValidationError as err:
+                    return make_response(
+                        jsonify(message=err.errors),
+                        422
+                    )
+                return skills_schema.dump(skill)
+        except Exception as e:
+            raise
+
+
+class SkillResource(Resource):
+    def delete(self, skid):
+        try:
+            email = get_jwt_identity()
+            profile = Profile.objects.get_or_404(email=email)
+            try:
+                skill = Skills.objects.get_or_404(id=skid)
+                profile.update(pull__skills=skill)
+                skill.delete()
+                return jsonify(profile=profile, msg="Skill removed")
+            except Exception as e:
+                raise e
+
+        except Exception as e:
+            raise e
 
 
 class ProfileResource(Resource):

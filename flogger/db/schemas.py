@@ -89,7 +89,8 @@ class SkillsSchema(Schema):
     id = ObjectID(dump_only=True)
     name = fields.String(required=True, validate=[
         validate.Length(min=3, max=15)])
-    proficiency = fields.Integer(required=True)
+    proficiency = fields.Integer(
+        required=True, validate=validate.Range(min=0, max=5))
 
     @post_load
     def make_object(self, data):
@@ -99,3 +100,7 @@ class SkillsSchema(Schema):
             name=data['name'],
             proficiency=data['proficiency']
         )
+
+    @post_dump(pass_many=True)
+    def wrap(self, data, many):
+        return data
