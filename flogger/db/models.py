@@ -58,6 +58,9 @@ class Skills(db.Document):
 
 
 class Profile(db.Document):
+    def __init__(self, **kwargs):
+        super(Profile, self).__init__(**kwargs)
+
     full_name = db.StringField(required=True)
     password = db.StringField()
     email = db.EmailField(required=True)
@@ -85,5 +88,5 @@ class Profile(db.Document):
 
     meta = {
         'strict': False,
-        'index':['email']
+        'index': ['email']
     }

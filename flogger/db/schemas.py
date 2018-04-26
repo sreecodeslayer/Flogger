@@ -104,3 +104,29 @@ class SkillsSchema(Schema):
     @post_dump(pass_many=True)
     def wrap(self, data, many):
         return data
+
+
+from .models import Profile
+
+
+class ProfileSchema(Schema):
+    id = ObjectID(dump_only=True)
+    full_name = fields.String(required=True)
+    password = fields.String(load_only=True, validate=[
+        validate.Length(min=8, max=15)])
+    email = fields.Email(required=True)
+    dob = fields.DateTime(required=True)
+    avatar = fields.URL()
+    permanent_residence = fields.String()
+    current_residence = fields.String()
+    mobile = fields.String()
+    tel = fields.String()
+    social_links = fields.List(fields.Nested(
+        SocialLinksSchema), dump_only=True)
+    skills = fields.List(fields.Nested(SkillsSchema), dump_only=True)
+
+    @post_load
+    def make_object(self, data):
+        if not data:
+            return None
+        return Profile(**data)
