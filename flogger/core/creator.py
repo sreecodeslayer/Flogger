@@ -43,14 +43,15 @@ class SocialLinksResource(Resource):
         try:
             email = get_jwt_identity()
             social_links = Profile.objects.get(email=email).social_links
-            return jsonify(social_links=social_links)
+            social_links = social_schema.dump(social_links, many=True)
+            return jsonify(social_links=social_links.data)
         except Exception as e:
             raise
 
     def post(self):
         try:
             email = get_jwt_identity()
-
+            profile = Profile.objects.get(email=email)
             data = request.get_json()
             try:
                 social = SocialLinks.objects.get(name=data.get('name'))
@@ -64,6 +65,7 @@ class SocialLinksResource(Resource):
                     social = social_schema.load(data)
                     if not social.errors:
                         social = social.data.save()
+                        profile.update(add_to_set__social_links=[social])
                         return social_schema.dump(social)
                     return make_response(
                         jsonify(message=social.errors),
