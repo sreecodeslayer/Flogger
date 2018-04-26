@@ -82,6 +82,24 @@ class SocialLinksResource(Resource):
             raise
 
 
+class SocialLinkResource(Resource):
+    def delete(self, soid):
+        try:
+            email = get_jwt_identity()
+            profile = Profile.objects.get_or_404(email=email)
+            try:
+                social = SocialLinks.objects.get_or_404(id=soid)
+                profile.update(pull__social_links=social)
+                social.delete()
+                profile.reload()
+                return jsonify(profile=profile, msg="Social link removed")
+            except Exception as e:
+                raise e
+
+        except Exception as e:
+            raise e
+
+
 class SkillsResource(Resource):
     def get(self):
         try:
@@ -134,6 +152,7 @@ class SkillResource(Resource):
                 skill = Skills.objects.get_or_404(id=skid)
                 profile.update(pull__skills=skill)
                 skill.delete()
+                profile.reload()
                 return jsonify(profile=profile, msg="Skill removed")
             except Exception as e:
                 raise e
