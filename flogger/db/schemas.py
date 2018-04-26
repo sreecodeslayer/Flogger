@@ -77,6 +77,10 @@ class SocialLinksSchema(Schema):
             fa_class=data.get('fa_class', '')
         )
 
+    @post_dump(pass_many=True)
+    def wrap(self, data, many):
+        return data
+
 
 from .models import Skills
 
