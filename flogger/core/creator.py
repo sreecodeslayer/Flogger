@@ -25,13 +25,14 @@ from flogger.db.models import (
 )
 
 from flogger.db.schemas import (
-    # ProfileSchema,
+    ProfileSchema,
     SkillsSchema,
     SocialLinksSchema
 )
 
 social_schema = SocialLinksSchema()
 skills_schema = SkillsSchema()
+profile_schema = ProfileSchema()
 
 
 class WorkBenchResource(Resource):
@@ -165,8 +166,9 @@ class ProfileResource(Resource):
     def get(self):
         try:
             email = get_jwt_identity()
-            profile = Profile.objects.exclude('password').get(email=email)
-            return jsonify(profile=profile)
+            profile = Profile.objects.get(email=email)
+            profile = profile_schema.dump(profile)
+            return jsonify(profile=profile.data)
         except Exception as e:
             raise
 
